@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title></title>
+        <style>
+            table, th, td {
+                border: 1px solid black;
+                border-collapse: collapse;
+                padding: 5px;
+            }
+            tr:nth-child(even) {
+                background:darkgrey;
+            }
+
+        </style>
+        
+        <script>
+
+            function removeRow(button) {
+                var table = document.getElementById("members");
+                var index = button.parentNode.parentNode.rowIndex;
+                table.deleteRow(index);
+
+                table.createCaption().innerHTML = table.rows.length-1;
+            }
+
+            function addDataToTable() {
+                var form = document.getElementById("form");
+                var table = document.getElementById("members");
+                var data = form.children;
+            
+                var date = data[9].value; 
+                // console.log(date);
+                var year = date.substring(0, 4); 
+
+                if(parseInt(data[2].value) < 18) {
+                    alert("Age needs to be more than 18");
+                } else if(parseInt(data[2].value) > 60) {
+                    alert("Age needs to be less than 60");
+                } else if(year != "2020") {
+                    alert("Start date has to be in 2020");
+                } else {
+                    // Creating Row
+                    var row = table.insertRow(-1);
+                    
+                    // Adding Cells
+                    var cell1 = row.insertCell(0); //Name
+                    var cell2 = row.insertCell(1); //Age
+                    var cell3 = row.insertCell(2); //Height 
+                    var cell4 = row.insertCell(3); //StartDate
+                    var cell5 = row.insertCell(4); //Delete Button
+
+                    // Creating Button for Row
+                    var element = document.createElement("input");
+                    element.setAttribute("type", "button");
+                    element.setAttribute("value", "Delete Row");
+                    element.setAttribute("onclick", "removeRow(this);");
+                    cell5.appendChild(element);
+                    
+                    // Adding the Data
+                    cell1.innerHTML = data[0].value;
+                    cell2.innerHTML = data[2].value;
+                    cell3.innerHTML = data[5].value + "'" + data[7].value + '"';
+                    cell4.innerHTML = data[9].value;
+                   
+
+                    table.createCaption().innerHTML = table.rows.length - 1;
+                    // Clears the form
+                    form.reset();
+                }
+            }
+        </script>
+
+    </head>
+
+    <body>
+        <form id="form">
+
+            Name:  <input type="text"/><br/>
+            Age:   <input type="text"/><br/>
+            
+            <label for="heightfeet">Height: </label>
+            <select id="heightfeet">
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+            </select>'
+            <label for="heightinch"> </label>
+            <select id="heightinch">
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+            </select>"
+            <br/>            
+            Start Date: <input type="date"/><br/>
+            <input type="reset" value="Reset"/>
+            <input type="button" value="Display" onclick="addDataToTable();"/>
+
+        </form>
+        <br/>
+
+        <table id="members">
+            <caption>0</caption>
+            <tr>
+                <th>Name</th>
+                <th>Age</th>
+                <th>Height</th>
+                <th>Start Date</th>
+                <th>Delete</th>
+            </tr>
+        </table>
+    </body>
+    
+</html>

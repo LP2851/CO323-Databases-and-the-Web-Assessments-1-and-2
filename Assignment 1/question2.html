@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+
+<html>
+
+    <head>
+        <style>
+            #container {
+                float: left;
+            }
+            div.box {
+                width: 100px;
+                height: 55px;
+                text-align: center;
+                background-color: grey;
+                display: inline-block;
+                margin-left: 5px;
+                margin-top: 10px;
+                padding-top: 40px;
+                
+            }
+        </style>
+        <script>
+            function generateBackgroundColor() {
+                var color ="#";
+                var letters = "0123456789ABCDEF";
+                for (var i = 0; i < 6; i++) {
+                    color += letters.charAt(Math.floor(Math.random() *15));
+                }
+                return color;
+            }
+
+            function createNewBox(i) {
+                var container = document.getElementById("container");
+                var box = document.createElement("div");
+                box.className = "box";
+               
+                var newBox = container.appendChild(box);
+                newBox.innerHTML = i;
+                var newMarginLeft = 5 * Math.pow(2, i);
+                newBox.style.marginLeft = newMarginLeft + "px";
+                box.style.backgroundColor = generateBackgroundColor();
+            }
+
+
+            function draw() {
+                var container = document.getElementById("container");
+                var num = document.getElementById("num").value;
+                
+                try {
+                    num = parseInt(num);
+                    if(num > 0 ) {
+                        container.innerHTML = "";
+
+                        for (var i = 1; i <= num; i++) {
+                            createNewBox(i);
+                        }
+                    }
+                } finally {}
+            }
+        </script>
+    </head>
+
+    <body>
+        <form>
+            <input id ="num" type="text"/>
+            <input type="button" value="Draw!" onclick="draw();"/>
+            <br/>
+        </form>
+
+        <div id="container">
+
+        </div>
+    </body>
+
+</html>

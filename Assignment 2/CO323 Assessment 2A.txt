@@ -1,0 +1,37 @@
+// CO323 Assessment 2 Part A // 
+// By Lucas Phillips 	     //
+
+// 1 //
+select Assessment.name, Assessment.weighting 
+from Assessment, Course
+where title = "Database Systems" and Course.cid = Assessment.cid 
+order by Assessment.name;
+
+// 2 //
+select Assessment.cid, Assessment.name, avg(Grade.mark) 
+from Grade, Assessment, Course 
+where Grade.aid = Assessment.aid and Course.cid = Assessment.cid
+group by Grade.aid
+order by Course.cid, Assessment.name;
+
+// 3 //
+// A // 
+select Course.cid, Course.title, Assessment.name, 
+Assessment.weighting, Grade.mark
+from Course, Assessment, Grade
+where Course.cid = Assessment.cid and
+Assessment.aid = Grade.aid and
+Grade.sid = "S0001";
+
+// B //
+select Course.cid, avg(Averages)
+from Course, Assessment, (
+    select Assessment.aid as aid, avg(Grade.mark * Assessment.weighting) as averages
+    from Grade, Assessment
+    where Grade.aid = Assessment.aid
+    and Grade.sid = "S0001"
+    group by Grade.aid
+) Averages
+where Averages.aid = Assessment.aid
+and Course.cid = Assessment.cid
+group by Course.cid;

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <style>
+            #table {
+                padding: 0px;
+            }
+            td {
+                height: 100px;
+                width: 100px;
+                padding: 10px;
+            }
+            div.basicBox {
+                border: 1px solid black;
+                height: 100%;
+                width: 100%;
+                padding: 0px;
+                margin: 0px;
+                text-align: center;
+                font-size: 80px;
+                
+            }
+            caption {
+                font-weight: bolder;
+                font-size: larger;
+            }
+        </style>
+        <script>
+            var grid = [];
+            var turn = "X";
+            var gameOver = false;
+            function start() {
+                var table = document.getElementById("table");
+                for(var x = 0; x < 3; x++) { //Rows
+                    var r = [];
+                    var row = table.insertRow(x);
+                    for(var y = 0; y < 3; y++) { // Columns/Cells
+                        var cell = row.insertCell(y);
+                        var innerDiv = document.createElement("div");
+                        innerDiv.setAttribute("class", "basicBox");
+                        innerDiv.setAttribute("onclick", "onBoxClicked(this);");
+                        cell.appendChild(innerDiv);
+                        r.push(innerDiv);
+                    }
+                    grid.push(r);
+                }
+            }
+
+            function resetBoard() {
+                //console.log("CALLED")
+                grid = [];
+                turn = "X";
+                gameOver = false;
+                var table = document.getElementById("table");
+                document.getElementById("caption").innerHTML = "It is Player " + turn + "'s go";
+                table.deleteRow(0);
+                table.deleteRow(0);
+                table.deleteRow(0);
+
+                start();
+            }
+
+            function won(player) {
+                document.getElementById("caption").innerHTML = "Player " + player.innerHTML + " has won!";
+                return true;
+            }
+
+            function draw() {
+                document.getElementById("caption").value = "Draw!";
+                return true;
+            }
+
+            function checkWinningConditions() {
+                // Verticals and Horizontals
+                for(var x = 0; x < 3; x++) {
+                    //console.log(i);
+                    //console.log(grid[x][0]);
+                    if(grid[x][0].innerHTML == grid[x][1].innerHTML && grid[x][0].innerHTML == grid[x][2].innerHTML && grid[x][0].innerHTML != "") {
+                        grid[x][0].style.backgroundColor = "yellow";
+                        grid[x][1].style.backgroundColor = "yellow";
+                        grid[x][2].style.backgroundColor = "yellow";
+                        return won(grid[x][0]);
+                    } else if(grid[0][x].innerHTML == grid[1][x].innerHTML && grid[0][x].innerHTML == grid[2][x].innerHTML && grid[0][x].innerHTML != "") {
+                        grid[0][x].style.backgroundColor = "yellow";
+                        grid[1][x].style.backgroundColor = "yellow";
+                        grid[2][x].style.backgroundColor = "yellow";
+                        return won(grid[0][x])
+                    }
+                }
+                // Diagonals
+                if(grid[0][0].innerHTML == grid[1][1].innerHTML && grid[2][2].innerHTML == grid[0][0].innerHTML && grid[0][0].innerHTML != "") {
+                    grid[0][0].style.backgroundColor = "yellow";
+                    grid[1][1].style.backgroundColor = "yellow";
+                    grid[2][2].style.backgroundColor = "yellow";
+                    return won(grid[0][0]);
+                } else if(grid[0][2].innerHTML == grid[1][1].innerHTML && grid[0][2].innerHTML == grid[2][0].innerHTML && grid[1][1].innerHTML != "") {
+                    grid[0][2].style.backgroundColor = "yellow";
+                    grid[1][1].style.backgroundColor = "yellow";
+                    grid[2][0].style.backgroundColor = "yellow";
+                    return won(grid[1][1]);
+                }
+
+                // Draw
+                var emptyCell = false;
+                for(var x = 0; x < 3; x++) {
+                    for(var y = 0; y < 3; y++) {
+                        if(grid[x][y].innerHTML == "") {
+                            emptyCell = true;
+                        }
+                    }
+                }
+                return ((emptyCell) ? false : draw());
+            }
+
+            function onBoxClicked(box) {
+                console.log("box clicked; box value: " + box.innerHTML);
+                if(box.innerHTML == "" && !gameOver) {
+                    //var playerSpan = document.getElementById("playerName");
+                    var caption = document.getElementById("caption");
+                    box.innerHTML = turn;
+                    box.style.color = (turn == "X") ? "red" : "blue";
+                    turn = (turn == "X") ? "O" : "X";
+                    caption.innerHTML = "It is Player " + turn + "'s go";
+                    // Check if game over
+                    gameOver = checkWinningConditions();
+                }
+            }
+        </script>
+    </head>
+
+    <body onload="start();">
+        <table id="table">
+            <caption id="caption">It is Player X's go</caption>
+
+        </table>
+
+        <form>
+            <input type="button" value="Reset Board" onclick="resetBoard();"/>
+        </form>
+    </body>
+
+</html>
